@@ -1,10 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, ExternalLink, Calendar as CalendarIcon, Utensils, Info } from 'lucide-react';
 
-// 공무원님의 구글 시트 ID가 적용되어 있습니다.
 const GOOGLE_SHEET_ID = "1pghEET0zyAht-7Ww4vuKQZ2jXWAe1zw-8vI7ujfO190";
 
-// 편식 대체 식재료 데이터
+// 2026년 법정 공휴일 데이터베이스
+export const holidayMap2026 = {
+  "2026-01-01": "신정",
+  "2026-02-16": "설날 연휴",
+  "2026-02-17": "설날",
+  "2026-02-18": "설날 연휴",
+  "2026-03-01": "3·1절",
+  "2026-03-02": "대체공휴일",
+  "2026-05-05": "어린이날",
+  "2026-05-24": "부처님오신날",
+  "2026-05-25": "대체공휴일",
+  "2026-06-03": "지방선거",
+  "2026-06-06": "현충일",
+  "2026-08-15": "광복절",
+  "2026-08-17": "대체공휴일",
+  "2026-09-24": "추석 연휴",
+  "2026-09-25": "추석",
+  "2026-09-26": "추석 연휴",
+  "2026-10-03": "개천절",
+  "2026-10-05": "대체공휴일",
+  "2026-10-09": "한글날",
+  "2026-12-25": "성탄절"
+};
+
 const alternativeIngredientsMap = {
   "다진 당근": { alt: "단호박", reason: "비슷한 영양소(비타민A)에 단맛이 나서 거부감이 적어요!" },
   "양파": { alt: "양배추", reason: "매운맛 없이 볶으면 달큰한 맛이 나서 아이들이 좋아해요." },
@@ -26,7 +48,6 @@ const checkSeasonal = (ingredients, month) => {
   return ingredients.some(ing => seasonals.some(s => ing.name.includes(s)));
 };
 
-// 유튜브 영상 ID 매핑
 const youtubeVideoMap = {
   "부드러운 소고기 미역국 정식": "z90ZqeqtPQY",
   "영양만점 야채 계란찜과 밥": "PtK88koPxDI",
@@ -75,6 +96,13 @@ const generateMockMeals = (year, month) => {
     { name: "채수 잔치국수", ingredients: [{ name: "소면", qty: "2인분" }, { name: "애호박", qty: "반개" }, { name: "다시마", qty: "1장" }] }
   ];
 
+  const weekendLunchOptions = [
+    { name: "짜장 떡볶이와 꼬마김밥", ingredients: [{ name: "떡볶이 떡", qty: "200g" }, { name: "짜장가루", qty: "2스푼" }, { name: "김밥용 김", qty: "2장" }] },
+    { name: "치즈 듬뿍 토마토 스파게티", ingredients: [{ name: "스파게티 면", qty: "2인분" }, { name: "토마토 소스", qty: "1컵" }, { name: "모짜렐라 치즈", qty: "한 줌" }] },
+    { name: "베이컨 계란 볶음밥", ingredients: [{ name: "베이컨", qty: "3줄" }, { name: "계란", qty: "2개" }, { name: "대파", qty: "약간" }] },
+    { name: "크림 소스 우동", ingredients: [{ name: "우동면", qty: "2개" }, { name: "생크림", qty: "1컵" }, { name: "양송이버섯", qty: "2개" }] }
+  ];
+
   const weekendDinnerOptions = [
     { name: "새우살 애호박전", ingredients: [{ name: "애호박", qty: "1개" }, { name: "다진 새우살", qty: "100g" }, { name: "부침가루", qty: "3스푼" }] },
     { name: "버섯 불고기 전골", ingredients: [{ name: "불고기용 소고기", qty: "300g" }, { name: "팽이버섯", qty: "1봉" }, { name: "당면", qty: "한 줌" }] }
@@ -93,12 +121,16 @@ const generateMockMeals = (year, month) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
     const dateObj = new Date(year, month, i);
     const dayOfWeek = dateObj.getDay(); 
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
-    let breakfastMenu, dinnerMenu;
     
-    if (isWeekend) {
+    // 주말이거나 공휴일인지 체크
+    const isHoliday = !!holidayMap2026[dateStr];
+    const isOffDay = dayOfWeek === 0 || dayOfWeek === 6 || isHoliday;
+
+    let breakfastMenu, lunchMenu = null, dinnerMenu;
+    
+    if (isOffDay) {
       breakfastMenu = weekendBreakfastOptions[(i + monthOffset) % weekendBreakfastOptions.length];
+      lunchMenu = weekendLunchOptions[(i + monthOffset) % weekendLunchOptions.length];
       dinnerMenu = weekendDinnerOptions[(i + monthOffset) % weekendDinnerOptions.length];
     } else {
       breakfastMenu = weekdayBreakfastOptions[(i + monthOffset) % weekdayBreakfastOptions.length];
@@ -108,12 +140,16 @@ const generateMockMeals = (year, month) => {
     const snackMenu = snackOptions[(i + monthOffset) % snackOptions.length];
 
     data[dateStr] = {
-      breakfast: { ...breakfastMenu, isSeasonal: checkSeasonal(breakfastMenu.ingredients, month), videoId: youtubeVideoMap[breakfastMenu.name] },
-      dinner: { ...dinnerMenu, isSeasonal: checkSeasonal(dinnerMenu.ingredients, month), videoId: youtubeVideoMap[dinnerMenu.name] }
+      breakfast: { ...breakfastMenu, isSeasonal: checkSeasonal(breakfastMenu.ingredients, month), videoId: youtubeVideoMap[breakfastMenu.name] || "" },
+      dinner: { ...dinnerMenu, isSeasonal: checkSeasonal(dinnerMenu.ingredients, month), videoId: youtubeVideoMap[dinnerMenu.name] || "" }
     };
 
-    if (i % 2 === 0) {
-      data[dateStr].snack = { ...snackMenu, isSeasonal: checkSeasonal(snackMenu.ingredients, month), videoId: youtubeVideoMap[snackMenu.name] };
+    if (lunchMenu) {
+      data[dateStr].lunch = { ...lunchMenu, isSeasonal: checkSeasonal(lunchMenu.ingredients, month), videoId: youtubeVideoMap[lunchMenu.name] || "" };
+    }
+
+    if (i % 2 === 0 || isOffDay) {
+      data[dateStr].snack = { ...snackMenu, isSeasonal: checkSeasonal(snackMenu.ingredients, month), videoId: youtubeVideoMap[snackMenu.name] || "" };
     }
   }
   return data;
@@ -288,11 +324,24 @@ export default function App() {
                 const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayData = meals[dateStr] || {};
                 const isToday = new Date().toDateString() === new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toDateString();
+                
+                // 공휴일 및 요일 계산
+                const holidayName = holidayMap2026[dateStr];
+                const isHoliday = !!holidayName;
+                const isSunday = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).getDay() === 0;
+                const isSaturday = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).getDay() === 6;
 
                 return (
                   <div key={day} className={`min-h-[140px] border rounded-xl p-2 transition-all hover:shadow-md bg-white ${isToday ? 'border-blue-400 shadow-sm ring-2 ring-blue-50' : 'border-slate-200'}`}>
-                    <div className={`text-sm font-bold mb-2 w-7 h-7 flex items-center justify-center rounded-full ${isToday ? 'bg-blue-500 text-white' : 'text-slate-700'}`}>
-                      {day}
+                    <div className="flex justify-between items-start mb-2">
+                      <div className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full ${isToday ? 'bg-blue-500 text-white' : (isSunday || isHoliday ? 'text-red-500' : isSaturday ? 'text-blue-500' : 'text-slate-700')}`}>
+                        {day}
+                      </div>
+                      {holidayName && (
+                        <span className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded-md break-keep text-center">
+                          {holidayName}
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       {['breakfast', 'lunch', 'dinner', 'snack'].map(type => {
@@ -435,7 +484,6 @@ export default function App() {
         }
         .animate-fade-in-up { animation: fadeInUp 0.3s ease-out forwards; }
         
-        /* Mobile Horizontal Scrollbar Customization */
         .custom-scrollbar::-webkit-scrollbar {
           height: 8px;
         }
