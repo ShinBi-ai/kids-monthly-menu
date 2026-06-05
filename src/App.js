@@ -439,7 +439,7 @@ export default function App() {
                                     {selectedMeal.videoId ? (
                                         <a href={`https://www.youtube.com/watch?v=${selectedMeal.videoId}`} target="_blank" rel="noopener noreferrer" 
                                            className="block relative rounded-[20px] overflow-hidden aspect-[16/9] bg-[#F2F4F6] group">
-                                            <img src={`https://img.youtube.com/vi/${selectedMeal.videoId}/maxresdefault.jpg`} onError={(e) => {e.target.src=`https://img.youtube.com/vi/${selectedMeal.videoId}/hqdefault.jpg`}} alt="Thumbnail" className="w-full h-full object-cover" />
+                                            <img src={`https://img.youtube.com/vi/${selectedMeal.videoId}/hqdefault.jpg`} alt="Thumbnail" className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                                                 <div className="w-14 h-14 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                                                     <div className="w-0 h-0 border-y-[8px] border-y-transparent border-l-[14px] border-l-[#F04452] ml-1"></div>
