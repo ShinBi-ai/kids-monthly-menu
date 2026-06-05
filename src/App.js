@@ -11,11 +11,13 @@ export const holidayMap2026 = {
   "2026-02-18": "설날 연휴",
   "2026-03-01": "3·1절",
   "2026-03-02": "대체공휴일",
+  "2026-05-01": "노동절",
   "2026-05-05": "어린이날",
   "2026-05-24": "부처님오신날",
   "2026-05-25": "대체공휴일",
   "2026-06-03": "지방선거",
   "2026-06-06": "현충일",
+  "2026-07-17": "제헌절",
   "2026-08-15": "광복절",
   "2026-08-17": "대체공휴일",
   "2026-09-24": "추석 연휴",
@@ -50,6 +52,10 @@ const checkSeasonal = (ingredients, month) => {
 
 const youtubeVideoMap = {
   "부드러운 소고기 미역국 정식": "z90ZqeqtPQY",
+  "치즈 듬뿍 토마토 스파게티": "34l_H7hRyR4",
+  "베이컨 계란 볶음밥": "14cysiLJkfg",
+  "크림 카레 우동": "tU6q1rFcDL0",
+  "짜장 떡볶이": "Rp94f6bXXeY",
   "영양만점 야채 계란찜과 밥": "PtK88koPxDI",
   "소화가 잘되는 닭가슴살 오트밀죽": "NpRDkTB98cc",
   "시금치 프리타타": "H4bxgz34ZR4",
@@ -97,10 +103,10 @@ const generateMockMeals = (year, month) => {
   ];
 
   const weekendLunchOptions = [
-    { name: "짜장 떡볶이와 꼬마김밥", ingredients: [{ name: "떡볶이 떡", qty: "200g" }, { name: "짜장가루", qty: "2스푼" }, { name: "김밥용 김", qty: "2장" }] },
-    { name: "치즈 듬뿍 토마토 스파게티", ingredients: [{ name: "스파게티 면", qty: "2인분" }, { name: "토마토 소스", qty: "1컵" }, { name: "모짜렐라 치즈", qty: "한 줌" }] },
-    { name: "베이컨 계란 볶음밥", ingredients: [{ name: "베이컨", qty: "3줄" }, { name: "계란", qty: "2개" }, { name: "대파", qty: "약간" }] },
-    { name: "크림 소스 우동", ingredients: [{ name: "우동면", qty: "2개" }, { name: "생크림", qty: "1컵" }, { name: "양송이버섯", qty: "2개" }] }
+    { name: "짜장 떡볶이", ingredients: [{ name: "떡볶이 떡", qty: "300g" }, { name: "짜장가루", qty: "3T" }, { name: "양파", qty: "1/2개" }, { name: "대파", qty: "1대" }, { name: "베이컨", qty: "50g" }, { name: "설탕", qty: "1T" }, { name: "후추", qty: "1t" }, { name: "진간장", qty: "1T" }] },
+    { name: "치즈 듬뿍 토마토 스파게티", ingredients: [{ name: "스파게티 면", qty: "140g" }, { name: "토마토 소스", qty: "400ml" }, { name: "소금", qty: "1t" }, { name: "후추", qty: "1t" }, { name: "굴소스", qty: "1T" }, { name: "진간장", qty: "2T" }, { name: "찬밥", qty: "2공기" }, { name: "참기름", qty: "1t" }, { name: "방울토마토", qty: "6~8개" }, { name: "통마늘", qty: "4개" }, { name: "양파", qty: "1/3개" }, { name: "베이컨", qty: "4줄" }, { name: "올리브 오일", qty: "2T" }, { name: "모짜렐라 치즈", qty: "한 줌" }] },
+    { name: "베이컨 계란 볶음밥", ingredients: [{ name: "베이컨", qty: "5줄" }, { name: "마늘", qty: "10알" }, { name: "식용유", qty: "1T" }, { name: "계란", qty: "3개" }, { name: "대파", qty: "1개" }] },
+    { name: "크림 카레 우동", ingredients: [{ name: "우동면", qty: "2개" }, { name: "양파", qty: "1/2개" }, { name: "소시지", qty: "2개" }, { name: "우유", qty: "400ml" }, { name: "고형 카레", qty: "40g" }, { name: "슬라이스 치즈", qty: "2장" }, { name: "오일", qty: "약간" }, { name: "크러쉬드레드페퍼", qty: "약간" }, { name: "파슬리 가루", qty: "약간" }] }
   ];
 
   const weekendDinnerOptions = [
